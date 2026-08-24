@@ -1,0 +1,11 @@
+title: My Security Blog
+description: Write-ups, notes, and things I learn while practicing on TryHackMe and elsewhere.
+theme: minima
+markdown: kramdown
+
+# Shows up in the theme's nav/footer
+author:
+  name: Utkarsh
+
+# Uncomment and set this once you know your repo name, if it is NOT <username>.github.io
+# baseurl: "/blog"
