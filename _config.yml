@@ -1,178 +1,30 @@
-# The Site Configuration
-
-# Import the theme
-theme: jekyll-theme-chirpy
-
-lang: en
-
-timezone:
-
-title: Utkarsh's Security Blog
-
-tagline: Write-ups and notes from TryHackMe and other practice
-
+title: "utkarsh@blog"
+tagline: "write-ups & notes from the terminal"
 description: >-
   Write-ups, notes, and things I learn while practicing on TryHackMe and elsewhere.
 
-# Fill in the protocol & hostname for your site (no trailing slash)
 url: "https://utkarsh854.github.io"
-
-github:
-  username: utkarsh854
-
-twitter:
-  username:
-
-social:
-  name: Utkarsh
-  email:
-  fediverse_handle:
-  links:
-    - https://github.com/utkarsh854
-
-webmaster_verifications:
-  google:
-  bing:
-  alexa:
-  yandex:
-  baidu:
-  facebook:
-
-analytics:
-  google:
-    id:
-  goatcounter:
-    id:
-  umami:
-    id:
-    domain:
-  matomo:
-    id:
-    domain:
-  cloudflare:
-    id:
-  fathom:
-    id:
-
-pageviews:
-  provider:
-
-theme_mode:
-
-cdn:
-
-avatar:
-
-social_preview_image:
-
-toc: true
-
-actions:
-  edit_post:
-    enabled: false
-    url: ""
-    static_url: false
-
-comments:
-  provider:
-  disqus:
-    shortname:
-  utterances:
-    repo:
-    issue_term:
-  giscus:
-    repo:
-    repo_id:
-    category:
-    category_id:
-    mapping:
-    strict:
-    input_position:
-    lang:
-    reactions_enabled:
-
-assets:
-  self_host:
-    enabled:
-    env:
-
-pwa:
-  enabled: true
-  cache:
-    enabled: true
-    deny_paths:
-
-paginate: 10
-
-# The base URL of your site (repo name, since this is a project site)
 baseurl: "/blog"
 
-# ------------ The following options are not recommended to be modified ------------------
+author: Utkarsh
+github_username: utkarsh854
 
+markdown: kramdown
+highlighter: rouge
 kramdown:
-  footnote_backlink: "&#8617;&#xfe0e;"
+  input: GFM
   syntax_highlighter: rouge
-  syntax_highlighter_opts:
-    css_class: highlight
-    span:
-      line_numbers: false
-    block:
-      line_numbers: true
-      start_line: 1
 
-collections:
-  tabs:
-    output: true
-    sort_by: order
+permalink: /posts/:title/
 
-defaults:
-  - scope:
-      path: ""
-      type: posts
-    values:
-      layout: post
-      comments: true
-      toc: true
-      permalink: /posts/:title/
-  - scope:
-      path: _drafts
-    values:
-      comments: false
-  - scope:
-      path: ""
-      type: tabs
-    values:
-      layout: page
-      permalink: /:title/
-
-sass:
-  style: compressed
-
-compress_html:
-  clippings: all
-  comments: all
-  endings: all
-  profile: false
-  blanklines: false
-  ignore:
-    envs: [development]
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
 
 exclude:
-  - "*.gem"
-  - "*.gemspec"
-  - docs
-  - tools
   - README.md
-  - LICENSE
-  - purgecss.js
-  - "*.config.js"
-  - "package*.json"
-
-jekyll-archives:
-  enabled: [categories, tags]
-  layouts:
-    category: category
-    tag: tag
-  permalinks:
-    tag: /tags/:name/
-    category: /categories/:name/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - "*.gemspec"

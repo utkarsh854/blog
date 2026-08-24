@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }} — {{ site.tagline }}{% endif %}</title>
+  <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | strip_newlines | truncate: 160 }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230a0d0a%22/><text x=%2250%22 y=%2264%22 font-size=%2246%22 text-anchor=%22middle%22 fill=%22%2339ff88%22 font-family=%22monospace%22>&gt;_</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  {% feed_meta %}
+  {% seo %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="{{ '/' | relative_url }}">
+        <span class="prompt">{{ site.author | default: "user" }}@blog</span>:~$<span class="cursor"></span>
+      </a>
+      <nav class="site-nav">
+        <a href="{{ '/' | relative_url }}">posts</a>
+        <a href="{{ '/about/' | relative_url }}">about</a>
+        <a href="https://github.com/{{ site.github_username }}">github</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© {{ site.time | date: "%Y" }} {{ site.author }}. built with jekyll, no gimmicks.</span>
+      <span>flags always redacted // {{ site.tagline }}</span>
+    </div>
+  </footer>
+</body>
+</html>

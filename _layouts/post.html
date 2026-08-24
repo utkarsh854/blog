@@ -1,0 +1,31 @@
+---
+layout: default
+---
+<article>
+  <div class="post-header">
+    <p class="cmdline"><span class="p">$</span> cat {{ page.title | slugify }}.md</p>
+    <h1>{{ page.title }}</h1>
+    <div class="submeta">
+      <span>{{ page.date | date: "%Y-%m-%d" }}</span>
+      {% assign words = content | strip_html | number_of_words %}
+      {% assign readtime = words | divided_by: 200 | at_least: 1 %}
+      <span>{{ readtime }} min read</span>
+      {% if page.categories.size > 0 %}<span>{{ page.categories | join: "/" }}</span>{% endif %}
+      {% if page.tags.size > 0 %}
+      <span>{% for tag in page.tags %}<span class="tag-pill">#{{ tag }}</span>{% endfor %}</span>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if page.image %}
+    {% assign banner = page.image.path | default: page.image %}
+    <img class="post-banner" src="{{ banner | relative_url }}" alt="{{ page.image.alt | default: page.title }}">
+  {% endif %}
+
+  {{ content }}
+
+  <div class="post-nav">
+    {% if page.previous %}<a href="{{ page.previous.url | relative_url }}">&larr; {{ page.previous.title }}</a>{% else %}<span></span>{% endif %}
+    {% if page.next %}<a href="{{ page.next.url | relative_url }}">{{ page.next.title }} &rarr;</a>{% endif %}
+  </div>
+</article>

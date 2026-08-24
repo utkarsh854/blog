@@ -1,0 +1,21 @@
+---
+layout: default
+---
+<p class="listing-cmd"><span class="p">$</span> ls -la ~/posts</p>
+
+{% if site.posts.size == 0 %}
+  <p class="empty-note"># nothing here yet. check back soon.</p>
+{% endif %}
+
+{% for post in site.posts %}
+<a class="post-row" href="{{ post.url | relative_url }}">
+  <div class="meta">{{ post.date | date: "%Y-%m-%d" }}{% if post.categories.size > 0 %} · {{ post.categories | join: "/" }}{% endif %}</div>
+  <div class="title">{{ post.title }}</div>
+  {% if post.excerpt %}<div class="desc">{{ post.excerpt | strip_html | truncate: 140 }}</div>{% endif %}
+  {% if post.tags.size > 0 %}
+  <div style="margin-top:8px;">
+    {% for tag in post.tags %}<span class="tag-pill">#{{ tag }}</span>{% endfor %}
+  </div>
+  {% endif %}
+</a>
+{% endfor %}

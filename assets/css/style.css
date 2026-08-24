@@ -1,0 +1,304 @@
+/* ---------------------------------------------------
+   utkarsh@blog — terminal / hacker theme
+--------------------------------------------------- */
+
+:root {
+  --bg: #0a0d0a;
+  --bg-panel: #0f130f;
+  --border: #1f2b1f;
+  --fg: #c7d1c7;
+  --fg-dim: #7a8a7a;
+  --green: #39ff88;
+  --green-dim: #1f9955;
+  --cyan: #58e6d9;
+  --red: #ff5c57;
+  --yellow: #f3f99d;
+  --mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --maxw: 780px;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--bg); }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--mono);
+  font-size: 16px;
+  line-height: 1.7;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* subtle CRT scanline overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.015) 0px,
+    rgba(255, 255, 255, 0.015) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+a {
+  color: var(--cyan);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(88, 230, 217, 0.4);
+}
+a:hover { color: var(--green); border-bottom-color: var(--green); }
+
+::selection { background: var(--green-dim); color: #04120a; }
+
+/* ---------- layout shell ---------- */
+
+.wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+header.site-header {
+  border-bottom: 1px solid var(--border);
+  padding: 22px 0;
+}
+
+.site-header .wrap {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.brand {
+  font-weight: 700;
+  color: var(--green);
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+.brand .prompt { color: var(--fg-dim); }
+.brand .cursor {
+  display: inline-block;
+  width: 9px;
+  height: 1.1em;
+  background: var(--green);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+nav.site-nav a {
+  color: var(--fg-dim);
+  border-bottom: none;
+  margin-left: 18px;
+  font-size: 0.92rem;
+}
+nav.site-nav a:hover { color: var(--green); }
+nav.site-nav a::before { content: "./"; color: var(--green-dim); }
+
+main { padding: 40px 0 60px; }
+
+footer.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 24px 0 40px;
+  color: var(--fg-dim);
+  font-size: 0.85rem;
+}
+footer.site-footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+/* ---------- home / post list ---------- */
+
+.listing-cmd {
+  color: var(--fg-dim);
+  margin-bottom: 22px;
+}
+.listing-cmd .p { color: var(--green); }
+
+.post-row {
+  display: block;
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  border-radius: 4px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  transition: border-color .15s ease, transform .1s ease;
+}
+.post-row:hover { border-color: var(--green-dim); transform: translateX(2px); }
+
+.post-row .meta {
+  color: var(--fg-dim);
+  font-size: 0.82rem;
+  margin-bottom: 4px;
+}
+.post-row .title {
+  color: var(--fg);
+  font-weight: 700;
+  font-size: 1.02rem;
+  border-bottom: none;
+}
+.post-row:hover .title { color: var(--green); }
+.post-row .desc {
+  color: var(--fg-dim);
+  font-size: 0.9rem;
+  margin-top: 6px;
+}
+
+.tag-pill {
+  display: inline-block;
+  color: var(--cyan);
+  font-size: 0.78rem;
+  border: 1px solid rgba(88, 230, 217, 0.3);
+  border-radius: 3px;
+  padding: 1px 6px;
+  margin-right: 6px;
+}
+
+/* ---------- post page ---------- */
+
+.post-header { margin-bottom: 26px; }
+.post-header .cmdline {
+  color: var(--fg-dim);
+  font-size: 0.88rem;
+  margin-bottom: 10px;
+}
+.post-header .cmdline .p { color: var(--green); }
+.post-header h1 {
+  margin: 0 0 10px;
+  font-size: 1.7rem;
+  color: var(--fg);
+  text-shadow: 0 0 18px rgba(57, 255, 136, 0.15);
+}
+.post-header .submeta {
+  color: var(--fg-dim);
+  font-size: 0.85rem;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.post-banner {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  margin: 18px 0 24px;
+  display: block;
+}
+
+article h2 {
+  color: var(--green);
+  font-size: 1.25rem;
+  margin-top: 2.2em;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+article h3 {
+  color: var(--cyan);
+  font-size: 1.05rem;
+  margin-top: 1.8em;
+}
+
+article p { color: var(--fg); }
+article img {
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: block;
+  margin: 14px 0;
+}
+
+article blockquote {
+  margin: 18px 0;
+  padding: 10px 16px;
+  border-left: 3px solid var(--green-dim);
+  background: var(--bg-panel);
+  color: var(--fg-dim);
+  border-radius: 0 4px 4px 0;
+}
+article blockquote p { margin: 0; color: var(--fg-dim); }
+article blockquote p::before { content: "# "; color: var(--green-dim); }
+
+article strong { color: var(--fg); }
+article code {
+  font-family: var(--mono);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  color: var(--yellow);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.88em;
+}
+
+/* terminal-window code blocks. Kramdown wraps highlighted fences in
+   div.highlighter-rouge > div.highlight > pre.highlight; plain fences
+   (no language) just produce a bare <pre><code>. Neutralize the wrapper
+   divs and style the actual <pre> everywhere, once, to avoid stacking. */
+article .highlighter-rouge,
+article .highlight {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+article pre {
+  position: relative;
+  background: #06080a;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: 16px 0;
+  padding: 30px 16px 14px;
+  overflow-x: auto;
+}
+article pre::before {
+  content: "\25CF \25CF \25CF";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  letter-spacing: 6px;
+  font-size: 10px;
+  color: #3a3f3a;
+  padding: 8px 12px 6px;
+  border-bottom: 1px solid var(--border);
+}
+article pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #d3e3d3;
+  font-size: 0.86em;
+}
+
+/* minimal Rouge token colors */
+article .highlight .c, article .highlight .c1, article .highlight .cm { color: var(--fg-dim); font-style: italic; }
+article .highlight .s, article .highlight .s1, article .highlight .s2, article .highlight .sb { color: var(--yellow); }
+article .highlight .k, article .highlight .kd, article .highlight .kn { color: var(--cyan); }
+article .highlight .nb, article .highlight .nf, article .highlight .nc { color: var(--green); }
+article .highlight .o, article .highlight .p { color: var(--fg); }
+article .highlight .mi, article .highlight .m { color: var(--yellow); }
+
+hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 0.88rem;
+}
+
+.empty-note { color: var(--fg-dim); }
+
+@media (max-width: 600px) {
+  body { font-size: 15px; }
+  .post-header h1 { font-size: 1.4rem; }
+}
