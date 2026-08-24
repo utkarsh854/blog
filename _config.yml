@@ -7,5 +7,5 @@ markdown: kramdown
 author:
   name: Utkarsh
 
-# Uncomment and set this once you know your repo name, if it is NOT <username>.github.io
-# baseurl: "/blog"
+url: "https://utkarsh854.github.io"
+baseurl: "/blog"
