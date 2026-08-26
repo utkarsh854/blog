@@ -1,6 +1,6 @@
 ---
 title: "Blog — TryHackMe Write-up"
-date: 2026-08-26 12:00:00 +0530
+date: 2026-08-23 12:00:00 +0530
 categories: [TryHackMe]
 tags: [wordpress, cve-2019-8942, privesc, suid]
 ---
