@@ -1,6 +1,6 @@
 ---
 title: "Simple CTF — TryHackMe Write-up"
-date: 2026-08-26 12:00:00 +0530
+date: 2026-08-25 12:00:00 +0530
 categories: [TryHackMe]
 tags: [simplectf, sqli, cve-2019-9053]
 image:
